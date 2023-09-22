@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            background-color: black;
+            color: black;
+            text-align: center;
+            font-size: 24px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Ensure the container covers the entire viewport height */
+        }
+
+        .container {
+            background-color: white;
+            text-align: center;
+            padding: 80px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h2>Login</h2>
+
+<div class="container">
+    <form method="post" th:action="@{/login}">
+        <p>Username</p>
+        <input name="username" placeholder="Enter username" type="text"><br><br>
+        <p>Password</p>
+        <input name="password" placeholder="Enter password" type="password"><br><br>
+        <button class="btn" type="submit">Connect</button>
+    </form>
+    <p style="color: red;" th:if="${loginError}" th:text="${loginError}"></p>
+
+    <p>You don't have an account? <span class="register-link" onclick="redirectToRegistration()" style="color: blue;">Register</span>
+    </p>
+</div>
+<script>
+    function redirectToRegistration() {
+        window.location.href = "/registration";
+    }
+</script>
+
+</body>
+</html>
+
+

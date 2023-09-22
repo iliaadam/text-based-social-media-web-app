@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>DIWA-text based social media</title>
+    <style>
+        /* Add your CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: purple;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 10px;
+        }
+
+        #logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .window {
+            display: none;
+            background-color: white;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 5px black;
+            height: auto; /* Adjust the height to make it taller */
+        }
+
+        .active {
+            display: block;
+        }
+
+        .menu {
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .menu a:hover {
+            text-decoration: underline;
+        }
+
+        .middle-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: calc(100vh - 20px); /* Adjust as needed to account for margins */
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 5px black;
+            overflow-y: auto; /* Add a vertical scrollbar if content overflows */
+        }
+
+
+        .left-column,
+        .right-column {
+            width: 48%; /* Adjust the width as needed */
+        }
+
+        .left-column {
+            float: left;
+        }
+
+        .right-column {
+            float: right;
+        }
+
+        #postInput {
+            width: 70%; /* Adjust the width as needed */
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .post-button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .post-button:hover {
+            background-color: darkblue; /* Change color on hover */
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="header">
+    <h1><span th:text="${username}">username</span>, welcome to DIWA app.</h1>
+    <button id="logout-button" onclick="logout()">Logout</button>
+</div>
+
+<div class="middle-panel">
+    <div class="window active" id="home">
+        <h2>Home Page</h2>
+        <p>Below you can see what your friends are posting daily.</p>
+        <ul>
+            <li th:each="post : ${postsFromFollowers}">
+                <span>
+                    <span style="color: red;" th:text="${post.user.username}"></span>
+                    <span> posted: </span>
+                    <span th:text="${post.content}"></span>
+                    <p style="text-decoration: underline;">Comments</p>
+                    <!-- There should add some comments-->
+                    <span th:if="${post.getLatestComment() != null}">
+                        <span style="color: red;" th:text="${post.getLatestComment().user.username}"></span>
+                        <!--<span> commented: </span>-->
+                        <span style="color: dodgerblue" th:text="${post.getLatestComment().content}"></span>
+
+                    </span>
+
+                    <form action="/submitComment" method="post">
+                        <input name="userId" th:value="${loggedInUser.id}" type="hidden"/>
+                        <input name="postId" th:value="${post.id}" type="hidden"/>
+                        <input name="content" placeholder="Write something..." type="text"/>
+                        <button type="submit">Comment</button>
+                    </form>
+
+
+                </span>
+                <!-- You can also display other post details here -->
+            </li>
+        </ul>
+    </div>
+
+    <!-- Add this section to display the user's posts -->
+    <div class="window" id="my-posts">
+        <!-- Form for submitting new posts -->
+        <form action="/submitPost" method="post">
+            <input name="userId" th:value="${loggedInUser.id}" type="hidden"/>
+            <input id="postInput" name="content" placeholder="Write something..." type="text"/>
+            <button class="post-button" type="submit">Post</button>
+        </form>
+        <h2>My Posts</h2>
+        <!-- List of user's posts -->
+        <ul>
+            <li th:each="post : ${posts}">
+                <span th:text="${post.content}"></span>
+                <p style="text-decoration: underline;">Comments</p>
+                <!-- There should add some comments-->
+                <span th:if="${post.getLatestComment() != null}">
+                        <span style="color: red;" th:text="${post.getLatestComment().user.username}"></span>
+                    <!--<span> commented: </span>-->
+                        <span style="color: dodgerblue" th:text="${post.getLatestComment().content}"></span>
+                </span>
+                <form action="/submitComment" method="post">
+                    <input name="userId" th:value="${loggedInUser.id}" type="hidden"/>
+                    <input name="postId" th:value="${post.id}" type="hidden"/>
+                    <input name="content" placeholder="Write something..." type="text"/>
+                    <button type="submit">Comment</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div class="window" id="my-comments">
+        <p>Below you can see your latest comments.</p>
+        <ul>
+            <!-- Assuming you have a model attribute named "loggedInUserComments" containing the user's comments -->
+            <li th:each="comment : ${loggedInUserComments}">
+                <span>You commented:</span>
+                <span style="color: green;" th:text="${comment.content}"></span>
+                <span>οn user</span>
+                <span style="color: red;" th:text="${comment.post.user.username}"></span>
+                <span>'s post</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="window" id="followers">
+        <div class="left-column">
+            <h3>Your followers list</h3>
+            <ul>
+                <li th:each="follower : ${followersUsers}">
+                    <span th:text="${follower.username}"></span>
+                    <form action="/unfollow" method="post">
+                        <input name="followerId" th:value="${loggedInUser.id}" type="hidden"/>
+                        <input name="followeeId" th:value="${follower.id}" type="hidden"/>
+                        <button style="background-color: red; color: white;" type="submit">UnFollow</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="right-column">
+            <h3>Your followees list</h3>
+            <ul>
+                <li th:each="followee : ${followees}">
+                    <span th:text="${followee}"></span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="window" id="find-friends">
+        <h2>Find Friends</h2>
+        <ul>
+            <li th:each="user : ${notFollowing}">
+                <span th:text="${user.username}"></span>
+                <form action="/follow" method="post">
+                    <input name="followerId" th:value="${loggedInUser.id}" type="hidden"/>
+                    <input name="followeeId" th:value="${user.id}" type="hidden"/> <!-- Use a unique ID -->
+                    <!-- Add style attribute to make the button blue -->
+                    <button style="background-color: blue; color: white;" type="submit">Follow</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="menu">
+    <a href="#" onclick="showWindow('home'); return false;">Home</a>
+    <a href="#" onclick="showWindow('my-posts'); return false;">My Posts</a>
+    <a href="#" onclick="showWindow('my-comments'); return false;">My Comments</a>
+    <a href="#" onclick="showWindow('followers'); return false;">Followers</a>
+    <a href="#" onclick="showWindow('find-friends'); return false;">Find Friends</a>
+</div>
+
+<script>
+    function showWindow(windowId) {
+        // Hide all windows
+        const windows = document.querySelectorAll('.window');
+        windows.forEach(window => {
+            window.classList.remove('active');
+        });
+
+        // Show the selected window
+        const selectedWindow = document.getElementById(windowId);
+        selectedWindow.classList.add('active');
+    }
+
+    function logout() {
+        // Redirect to the initial page (initial.html)
+        window.location.href = "/";
+    }
+
+</script>
+</body>
+</html>

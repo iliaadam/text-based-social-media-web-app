@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration and Login</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Ensure the container covers the entire viewport height */
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            text-align: center;
+            padding: 80px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .black-text {
+            color: black;
+        }
+
+        .bold-text {
+            font-weight: bold;
+        }
+
+        .blue-button {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="black-text bold-text">Become a member</h2>
+
+    <!-- Button to go to Registration Page -->
+    <button class="blue-button" id="signup-btn">Create Account</button>
+
+    <p class="black-text bold-text">Do you have an account?</p>
+
+    <!-- Button to go to Login Page -->
+    <button class="blue-button" id="signin-btn">Login</button>
+</div>
+
+<script>
+    // Get references to the buttons
+    const signupBtn = document.getElementById("signup-btn");
+    const signinBtn = document.getElementById("signin-btn");
+
+    // Add click event listeners to the buttons
+    signupBtn.addEventListener("click", function () {
+        window.location.href = "/registration"; // Redirect to the registration page
+    });
+
+    signinBtn.addEventListener("click", function () {
+        window.location.href = "/login"; // Redirect to the login page
+    });
+</script>
+
+</body>
+</html>
+
