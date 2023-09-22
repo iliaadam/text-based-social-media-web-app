@@ -25,3 +25,6 @@ The code for this web application implements a text-based social media platform.
 The application is built using Spring Boot, providing a robust and scalable foundation for web development. It utilizes various Spring components such as controllers, repositories, and services to manage user data and interactions. The application also integrates with a database to persist user-related information and posts.
 
 Feel free to explore the codebase to learn more about how the application works and how it leverages the Spring Boot framework for building web applications.
+
+
+THE CODE IS IN THE MASTER BRANCH CURRENTLY, I WILL TRY TO FIX IT !!!
