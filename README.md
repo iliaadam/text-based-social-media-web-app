@@ -28,8 +28,7 @@ Feel free to explore the codebase to learn more about how the application works 
 
 ## Prerequisites to run the project
 
-First, clone this repository to your local machine using the following command:
-git clone https://github.com/your-username/your-repository.git
+First, clone this repository to your local machine.
 
 To run this project you need to install the postgresql and setup the database.
 
@@ -44,6 +43,7 @@ To run this project you need to install the postgresql and setup the database.
    ## Table users:
    
      -- Table: public.users
+   
      CREATE TABLE IF NOT EXISTS public.users
      (
         id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
@@ -56,6 +56,7 @@ To run this project you need to install the postgresql and setup the database.
    ## Table posts:
 
     -- Table: public.posts
+   
     CREATE TABLE IF NOT EXISTS public.posts
     (
         id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
@@ -71,6 +72,7 @@ To run this project you need to install the postgresql and setup the database.
    ## Table followers:
 
     -- Table: public.followers
+   
     CREATE TABLE IF NOT EXISTS public.followers
     (
         id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
@@ -90,6 +92,7 @@ To run this project you need to install the postgresql and setup the database.
    ## Table comments
 
     -- Table: public.comments
+   
     CREATE TABLE IF NOT EXISTS public.comments
     (
         id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
